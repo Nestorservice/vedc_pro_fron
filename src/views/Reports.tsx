@@ -162,11 +162,11 @@ export function Reports() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="p-8 space-y-8 animate-fade-in">
+      <div className="border-b-2 border-black pb-6 flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-slate-800">Rapports & Exports</h3>
-          <p className="text-sm text-slate-500 mt-0.5">Catalogue des rapports exportables</p>
+          <h1 className="text-4xl font-black uppercase tracking-tight">Rapports</h1>
+          <p className="text-sm font-bold uppercase tracking-wider text-gray-600 mt-2">Catalogue des rapports exportables</p>
         </div>
         <Button variant="secondary"><Download size={16} /> Exporter</Button>
       </div>

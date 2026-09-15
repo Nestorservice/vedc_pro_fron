@@ -1,0 +1,20 @@
+{
+  "name": "VEDC - Systeme d'Information",
+  "short_name": "VEDC",
+  "description": "Systeme d'information de La Vraie Eglise de Dieu du Cameroun",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "fr-FR"
+}

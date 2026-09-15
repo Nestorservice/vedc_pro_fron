@@ -36,10 +36,10 @@ export function Servants() {
   if (loading) return <div className="space-y-6"><div className="grid grid-cols-1 md:grid-cols-3 gap-4">{[...Array(3)].map((_, i) => <Card key={i}><Skeleton className="h-20 w-full" /></Card>)}</div><Card><Skeleton className="h-64 w-full" /></Card></div>;
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div>
-        <h3 className="text-lg font-semibold text-slate-800">Gestion des Serviteurs</h3>
-        <p className="text-sm text-slate-500 mt-0.5">{serviteurs.length} serviteurs enregistres</p>
+    <div className="p-8 space-y-8 animate-fade-in">
+      <div className="border-b-2 border-black pb-6">
+        <h1 className="text-4xl font-black uppercase tracking-tight">Serviteurs</h1>
+        <p className="text-sm font-bold uppercase tracking-wider text-gray-600 mt-2">{serviteurs.length} serviteurs enregistres</p>
       </div>
 
       {error && (

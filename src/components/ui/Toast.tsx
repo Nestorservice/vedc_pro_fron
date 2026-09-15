@@ -53,7 +53,7 @@ function ToastContainer() {
   if (toasts.length === 0) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-[100] space-y-2 max-w-sm">
+    <div className="fixed top-4 right-4 z-[100] space-y-3 max-w-sm">
       {toasts.map(toast => (
         <ToastItem key={toast.id} toast={toast} onClose={() => removeToast(toast.id)} />
       ))}
@@ -63,28 +63,21 @@ function ToastContainer() {
 
 function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
   const icons = {
-    success: <CheckCircle size={16} className="text-emerald-500 shrink-0" />,
-    error: <AlertCircle size={16} className="text-red-500 shrink-0" />,
-    warning: <AlertTriangle size={16} className="text-amber-500 shrink-0" />,
-    info: <Info size={16} className="text-blue-500 shrink-0" />,
-  };
-
-  const borders = {
-    success: 'border-l-emerald-500',
-    error: 'border-l-red-500',
-    warning: 'border-l-amber-500',
-    info: 'border-l-blue-500',
+    success: <CheckCircle size={18} className="text-black shrink-0" />,
+    error: <AlertCircle size={18} className="text-red-600 shrink-0" />,
+    warning: <AlertTriangle size={18} className="text-red-600 shrink-0" />,
+    info: <Info size={18} className="text-black shrink-0" />,
   };
 
   return (
-    <div className={`bg-white rounded-lg shadow-lg border border-slate-100 border-l-4 ${borders[toast.type]} p-4 animate-fade-in flex items-start gap-3`}>
+    <div className="bg-white border-2 border-black p-5 animate-fade-in flex items-start gap-4">
       {icons[toast.type]}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-slate-800">{toast.title}</p>
-        {toast.message && <p className="text-xs text-slate-500 mt-0.5">{toast.message}</p>}
+        <p className="text-sm font-bold uppercase tracking-wide text-black">{toast.title}</p>
+        {toast.message && <p className="text-xs text-gray-600 mt-1">{toast.message}</p>}
       </div>
-      <button onClick={onClose} className="p-0.5 rounded hover:bg-slate-100 transition-all duration-200 shrink-0">
-        <X size={14} className="text-slate-400" />
+      <button onClick={onClose} className="p-1 border-2 border-black hover:bg-black hover:text-white transition-all duration-150 shrink-0">
+        <X size={14} />
       </button>
     </div>
   );

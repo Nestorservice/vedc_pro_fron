@@ -55,13 +55,11 @@ export function Members() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h3 className="text-lg font-semibold text-slate-800">Gestion des Membres</h3>
-          <p className="text-sm text-slate-500 mt-0.5">{total} membres enregistres</p>
-        </div>
-        <Button onClick={() => setShowCreate(true)}><Plus size={16} /> Nouveau Membre</Button>
+    <div className="p-8 space-y-8 animate-fade-in">
+      {/* Page Title */}
+      <div className="border-b-2 border-black pb-6">
+        <h1 className="text-4xl font-black uppercase tracking-tight">Membres</h1>
+        <p className="text-sm font-bold uppercase tracking-wider text-gray-600 mt-2">{total} membres enregistres</p>
       </div>
 
       {error && (
@@ -73,12 +71,15 @@ export function Members() {
       )}
 
       <Card padding={false}>
-        <div className="p-4 border-b border-slate-100">
-          <div className="relative max-w-sm">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input type="text" placeholder="Rechercher par nom ou prenom..." value={search}
-              onChange={e => { setSearch(e.target.value); setPage(1); }}
-              className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200" />
+        <div className="p-6 border-b-2 border-black">
+          <div className="flex items-center gap-4">
+            <div className="relative flex-1 max-w-md">
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-black" />
+              <input type="text" placeholder="Rechercher par nom ou prenom..." value={search}
+                onChange={e => { setSearch(e.target.value); setPage(1); }}
+                className="w-full pl-12 pr-4 py-3 text-sm border-2 border-black focus:outline-none focus:border-gray-600 transition-all duration-150" />
+            </div>
+            <Button onClick={() => setShowCreate(true)}><Plus size={16} /> Nouveau Membre</Button>
           </div>
         </div>
 

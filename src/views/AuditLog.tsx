@@ -46,10 +46,10 @@ export function AuditLog() {
   if (loading) return <div className="space-y-6"><Card><Skeleton className="h-64 w-full" /></Card><Card><Skeleton className="h-96 w-full" /></Card></div>;
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div>
-        <h3 className="text-lg font-semibold text-slate-800">Journal d'Audit</h3>
-        <p className="text-sm text-slate-500 mt-0.5">Historique complet des actions du systeme</p>
+    <div className="p-8 space-y-8 animate-fade-in">
+      <div className="border-b-2 border-black pb-6">
+        <h1 className="text-4xl font-black uppercase tracking-tight">Journal d'Audit</h1>
+        <p className="text-sm font-bold uppercase tracking-wider text-gray-600 mt-2">Historique complet des actions du systeme</p>
       </div>
 
       {error && (

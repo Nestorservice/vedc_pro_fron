@@ -41,13 +41,10 @@ export function UsersView() {
   if (loading) return <Card><Skeleton className="h-96 w-full" /></Card>;
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h3 className="text-lg font-semibold text-slate-800">Gestion des Utilisateurs</h3>
-          <p className="text-sm text-slate-500 mt-0.5">{users.length} comptes applicatifs</p>
-        </div>
-        <Button onClick={() => setShowCreate(true)}><Plus size={16} /> Nouveau Compte</Button>
+    <div className="p-8 space-y-8 animate-fade-in">
+      <div className="border-b-2 border-black pb-6">
+        <h1 className="text-4xl font-black uppercase tracking-tight">Utilisateurs</h1>
+        <p className="text-sm font-bold uppercase tracking-wider text-gray-600 mt-2">{users.length} comptes applicatifs</p>
       </div>
 
       {error && (

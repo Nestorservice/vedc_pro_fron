@@ -46,10 +46,10 @@ export function Transfers() {
   if (loading) return <div className="space-y-6"><div className="grid grid-cols-2 md:grid-cols-4 gap-4">{[...Array(4)].map((_, i) => <Card key={i}><Skeleton className="h-16 w-full" /></Card>)}</div><Card><Skeleton className="h-64 w-full" /></Card></div>;
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div>
-        <h3 className="text-lg font-semibold text-slate-800">Gestion des Transferts</h3>
-        <p className="text-sm text-slate-500 mt-0.5">Suivi des demandes de transfert entre territoires</p>
+    <div className="p-8 space-y-8 animate-fade-in">
+      <div className="border-b-2 border-black pb-6">
+        <h1 className="text-4xl font-black uppercase tracking-tight">Transferts</h1>
+        <p className="text-sm font-bold uppercase tracking-wider text-gray-600 mt-2">Suivi des demandes de transfert entre territoires</p>
       </div>
 
       {error && (
