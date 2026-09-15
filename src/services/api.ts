@@ -23,7 +23,19 @@ import type {
 } from './types';
 
 // --- Configuration ---
-const API_BASE_URL = 'https://railway.app/api/v1';
+const API_BASE_URL = 'https://vedc-api-production.up.railway.app/api/v1';
+const USE_MOCK_DATA = true; // Mode démo activé par défaut
+
+// Import mock data
+import {
+  mockDashboard,
+  mockPersonnes,
+  mockTerritoires,
+  mockServiteurs,
+  mockTransferts,
+  mockComptes,
+  mockJournal,
+} from './mockData';
 
 // --- Error Classes ---
 export class ApiError extends Error {
@@ -213,6 +225,18 @@ export const api = {
   // --- Auth ---
   auth: {
     login: async (data: DemandeConnexion): Promise<Enveloppe<ReponseJetons>> => {
+      if (USE_MOCK_DATA) {
+        // Mode démo - accepter n'importe quel identifiant
+        const mockTokens: ReponseJetons = {
+          jeton_acces: 'mock-access-token-demo',
+          jeton_raffraichissement: 'mock-refresh-token-demo',
+          type: 'Bearer',
+          expire_dans: 3600,
+        };
+        setTokens(mockTokens.jeton_acces, mockTokens.jeton_raffraichissement);
+        return { donnees: mockTokens };
+      }
+      
       const result = await request<ReponseJetons>('/auth/connexion', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -222,6 +246,16 @@ export const api = {
     },
 
     refresh: async (): Promise<Enveloppe<ReponseJetons>> => {
+      if (USE_MOCK_DATA) {
+        const mockTokens: ReponseJetons = {
+          jeton_acces: 'mock-access-token-demo',
+          jeton_raffraichissement: 'mock-refresh-token-demo',
+          type: 'Bearer',
+          expire_dans: 3600,
+        };
+        return { donnees: mockTokens };
+      }
+      
       const refreshToken = getRefreshToken();
       if (!refreshToken) throw new NetworkError('Pas de token de rafraichissement');
       return request<ReponseJetons>('/auth/rafraichir', {
@@ -231,6 +265,11 @@ export const api = {
     },
 
     logout: async (): Promise<void> => {
+      if (USE_MOCK_DATA) {
+        clearTokens();
+        return;
+      }
+      
       try {
         await request('/auth/deconnexion', { method: 'POST' });
       } finally {
@@ -239,6 +278,22 @@ export const api = {
     },
 
     getProfile: async (): Promise<Enveloppe<Profil>> => {
+      if (USE_MOCK_DATA) {
+        const mockProfil: Profil = {
+          id: 'u1',
+          email: 'admin@vedc.cm',
+          nom_complet: 'Administrateur Principal',
+          role: 'super_admin',
+          territoire_id: 't1',
+          territoire_nom: 'Douala Centre',
+          permissions: ['LECTURE_MEMBRES', 'ECRITURE_MEMBRES', 'GESTION_TERRITOIRES'],
+          actif: true,
+          derniere_connexion: new Date().toISOString(),
+          cree_le: '2020-01-01T00:00:00Z',
+        };
+        return { donnees: mockProfil };
+      }
+      
       return request<Profil>('/auth/moi');
     },
   },
@@ -246,19 +301,47 @@ export const api = {
   // --- Territoires ---
   territoires: {
     list: async (params?: { page?: number; par_page?: number; niveau?: string; recherche?: string }): Promise<Enveloppe<Territoire[]>> => {
+      if (USE_MOCK_DATA) {
+        return { 
+          donnees: mockTerritoires,
+          meta: { total: mockTerritoires.length, page: 1, par_page: 10 }
+        };
+      }
       const qs = buildQueryString(params as Record<string, string | number | undefined>);
       return request<Territoire[]>(`/territoires${qs}`);
     },
 
     getTree: async (): Promise<Enveloppe<TerritoireArbre[]>> => {
+      if (USE_MOCK_DATA) {
+        return { donnees: [] };
+      }
       return request<TerritoireArbre[]>('/territoires/arbre');
     },
 
     get: async (id: string): Promise<Enveloppe<Territoire>> => {
+      if (USE_MOCK_DATA) {
+        const terr = mockTerritoires.find(t => t.id === id);
+        if (!terr) throw new ApiError({ code: 'RESSOURCE_INTROUVABLE', message: 'Territoire introuvable', requete_id: '' }, 404);
+        return { donnees: terr };
+      }
       return request<Territoire>(`/territoires/${id}`);
     },
 
     create: async (data: EntreeCreationTerritoire): Promise<Enveloppe<Territoire>> => {
+      if (USE_MOCK_DATA) {
+        const newTerr: Territoire = {
+          id: `t${Date.now()}`,
+          nom: data.nom,
+          niveau: data.niveau,
+          code: data.code,
+          parent_id: data.parent_id || null,
+          parent_nom: null,
+          actif: true,
+          cree_le: new Date().toISOString(),
+          modifie_le: new Date().toISOString(),
+        };
+        return { donnees: newTerr };
+      }
       return request<Territoire>('/territoires', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -266,6 +349,11 @@ export const api = {
     },
 
     update: async (id: string, data: EntreeModificationTerritoire): Promise<Enveloppe<Territoire>> => {
+      if (USE_MOCK_DATA) {
+        const terr = mockTerritoires.find(t => t.id === id);
+        if (!terr) throw new ApiError({ code: 'RESSOURCE_INTROUVABLE', message: 'Territoire introuvable', requete_id: '' }, 404);
+        return { donnees: { ...terr, ...data, modifie_le: new Date().toISOString() } };
+      }
       return request<Territoire>(`/territoires/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(data),
@@ -273,14 +361,21 @@ export const api = {
     },
 
     archive: async (id: string): Promise<void> => {
+      if (USE_MOCK_DATA) return;
       await request(`/territoires/${id}`, { method: 'DELETE' });
     },
 
     getDescendants: async (id: string): Promise<Enveloppe<TerritoireArbre[]>> => {
+      if (USE_MOCK_DATA) return { donnees: [] };
       return request<TerritoireArbre[]>(`/territoires/${id}/descendants`);
     },
 
     setActivation: async (id: string, actif: boolean): Promise<Enveloppe<Territoire>> => {
+      if (USE_MOCK_DATA) {
+        const terr = mockTerritoires.find(t => t.id === id);
+        if (!terr) throw new ApiError({ code: 'RESSOURCE_INTROUVABLE', message: 'Territoire introuvable', requete_id: '' }, 404);
+        return { donnees: { ...terr, actif, modifie_le: new Date().toISOString() } };
+      }
       return request<Territoire>(`/territoires/${id}/activation`, {
         method: 'PUT',
         body: JSON.stringify({ actif }),
@@ -291,15 +386,54 @@ export const api = {
   // --- Personnes ---
   personnes: {
     list: async (params?: { page?: number; par_page?: number; recherche?: string; territoire_id?: string; statut?: string }): Promise<Enveloppe<Personne[]>> => {
+      if (USE_MOCK_DATA) {
+        let filtered = [...mockPersonnes];
+        if (params?.recherche) {
+          const search = params.recherche.toLowerCase();
+          filtered = filtered.filter(p => 
+            p.nom.toLowerCase().includes(search) || 
+            p.prenom.toLowerCase().includes(search)
+          );
+        }
+        return { 
+          donnees: filtered,
+          meta: { total: filtered.length, page: params?.page || 1, par_page: params?.par_page || 10 }
+        };
+      }
       const qs = buildQueryString(params as Record<string, string | number | undefined>);
       return request<Personne[]>(`/personnes${qs}`);
     },
 
     get: async (id: string): Promise<Enveloppe<Personne>> => {
+      if (USE_MOCK_DATA) {
+        const person = mockPersonnes.find(p => p.id === id);
+        if (!person) throw new ApiError({ code: 'RESSOURCE_INTROUVABLE', message: 'Personne introuvable', requete_id: '' }, 404);
+        return { donnees: person };
+      }
       return request<Personne>(`/personnes/${id}`);
     },
 
     create: async (data: EntreeCreationPersonne): Promise<Enveloppe<Personne>> => {
+      if (USE_MOCK_DATA) {
+        const newPerson = {
+          id: String(Date.now()),
+          nom: data.nom,
+          prenom: data.prenom,
+          sexe: data.sexe,
+          date_naissance: data.date_naissance,
+          telephone1: data.telephone1 || null,
+          telephone2: null,
+          email: data.email || null,
+          situation_matrimoniale: data.situation_matrimoniale || null,
+          statut: 'actif' as const,
+          territoire_id: data.territoire_id,
+          territoire_nom: 'Douala Centre',
+          date_adhesion: data.date_adhesion,
+          cree_le: new Date().toISOString(),
+          modifie_le: new Date().toISOString(),
+        };
+        return { donnees: newPerson };
+      }
       return request<Personne>('/personnes', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -307,6 +441,11 @@ export const api = {
     },
 
     update: async (id: string, data: EntreeModificationPersonne): Promise<Enveloppe<Personne>> => {
+      if (USE_MOCK_DATA) {
+        const person = mockPersonnes.find(p => p.id === id);
+        if (!person) throw new ApiError({ code: 'RESSOURCE_INTROUVABLE', message: 'Personne introuvable', requete_id: '' }, 404);
+        return { donnees: { ...person, ...data, modifie_le: new Date().toISOString() } };
+      }
       return request<Personne>(`/personnes/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(data),
@@ -314,6 +453,7 @@ export const api = {
     },
 
     archive: async (id: string): Promise<void> => {
+      if (USE_MOCK_DATA) return;
       await request(`/personnes/${id}`, { method: 'DELETE' });
     },
   },
@@ -335,15 +475,34 @@ export const api = {
   // --- Transferts ---
   transferts: {
     list: async (params?: { page?: number; par_page?: number; statut?: string }): Promise<Enveloppe<Transfert[]>> => {
+      if (USE_MOCK_DATA) {
+        let filtered = [...mockTransferts];
+        if (params?.statut) {
+          filtered = filtered.filter(t => t.statut === params.statut);
+        }
+        return { 
+          donnees: filtered,
+          meta: { total: filtered.length, page: 1, par_page: 10 }
+        };
+      }
       const qs = buildQueryString(params as Record<string, string | number | undefined>);
       return request<Transfert[]>(`/transferts${qs}`);
     },
 
     get: async (id: string): Promise<Enveloppe<Transfert>> => {
+      if (USE_MOCK_DATA) {
+        const tr = mockTransferts.find(t => t.id === id);
+        if (!tr) throw new ApiError({ code: 'RESSOURCE_INTROUVABLE', message: 'Transfert introuvable', requete_id: '' }, 404);
+        return { donnees: tr };
+      }
       return request<Transfert>(`/transferts/${id}`);
     },
 
     getPendingCount: async (): Promise<Enveloppe<{ nombre: number }>> => {
+      if (USE_MOCK_DATA) {
+        const count = mockTransferts.filter(t => t.statut === 'en_attente').length;
+        return { donnees: { nombre: count } };
+      }
       return request<{ nombre: number }>('/transferts/nombre-en-attente');
     },
 
@@ -373,15 +532,36 @@ export const api = {
   // --- Serviteurs ---
   serviteurs: {
     list: async (params?: { page?: number; par_page?: number; grade?: string; territoire_id?: string }): Promise<Enveloppe<Serviteur[]>> => {
+      if (USE_MOCK_DATA) {
+        return { 
+          donnees: mockServiteurs,
+          meta: { total: mockServiteurs.length, page: 1, par_page: 10 }
+        };
+      }
       const qs = buildQueryString(params as Record<string, string | number | undefined>);
       return request<Serviteur[]>(`/serviteurs${qs}`);
     },
 
     get: async (id: string): Promise<Enveloppe<Serviteur>> => {
+      if (USE_MOCK_DATA) {
+        const serv = mockServiteurs.find(s => s.id === id);
+        if (!serv) throw new ApiError({ code: 'RESSOURCE_INTROUVABLE', message: 'Serviteur introuvable', requete_id: '' }, 404);
+        return { donnees: serv };
+      }
       return request<Serviteur>(`/serviteurs/${id}`);
     },
 
     getStats: async (): Promise<Enveloppe<RepartitionGrade[]>> => {
+      if (USE_MOCK_DATA) {
+        return {
+          donnees: [
+            { grade: 'diacre', nombre: 35, pourcentage: 39.3 },
+            { grade: 'ancien', nombre: 28, pourcentage: 31.5 },
+            { grade: 'pasteur', nombre: 15, pourcentage: 16.9 },
+            { grade: 'evangliste', nombre: 11, pourcentage: 12.3 },
+          ]
+        };
+      }
       return request<RepartitionGrade[]>('/serviteurs/statistiques');
     },
 
@@ -534,14 +714,33 @@ export const api = {
   // --- Rapports ---
   rapports: {
     getCatalogue: async (): Promise<Enveloppe<DescriptionRapport[]>> => {
+      if (USE_MOCK_DATA) {
+        return { donnees: [] };
+      }
       return request<DescriptionRapport[]>('/rapports/catalogue');
     },
 
     getDashboard: async (): Promise<Enveloppe<TableauDeBord>> => {
+      if (USE_MOCK_DATA) {
+        return { donnees: mockDashboard };
+      }
       return request<TableauDeBord>('/rapports/tableau-de-bord');
     },
 
     getEffectifs: async (params?: { territoire_id?: string; periode?: string }): Promise<Enveloppe<RapportEffectifs>> => {
+      if (USE_MOCK_DATA) {
+        return { 
+          donnees: {
+            periode: '2024',
+            territoires: [
+              { territoire_id: 't1', territoire_nom: 'Douala Centre', effectif: 450 },
+              { territoire_id: 't2', territoire_nom: 'Yaoundé I', effectif: 380 },
+              { territoire_id: 't3', territoire_nom: 'Bafoussam', effectif: 290 },
+            ],
+            total_general: 1120,
+          }
+        };
+      }
       const qs = buildQueryString(params as Record<string, string | undefined>);
       return request<RapportEffectifs>(`/rapports/effectifs${qs}`);
     },
@@ -552,6 +751,21 @@ export const api = {
     },
 
     getMouvements: async (params?: { annee?: number }): Promise<Enveloppe<RapportMouvements>> => {
+      if (USE_MOCK_DATA) {
+        return {
+          donnees: {
+            annee: 2024,
+            mouvements: [
+              { mois: 'Jan', entrees: 45, sorties: 12, transferts: 3 },
+              { mois: 'Fev', entrees: 52, sorties: 8, transferts: 5 },
+              { mois: 'Mar', entrees: 38, sorties: 15, transferts: 2 },
+              { mois: 'Avr', entrees: 61, sorties: 10, transferts: 4 },
+              { mois: 'Mai', entrees: 49, sorties: 7, transferts: 3 },
+              { mois: 'Jun', entrees: 55, sorties: 11, transferts: 6 },
+            ],
+          }
+        };
+      }
       const qs = buildQueryString(params as Record<string, number | undefined>);
       return request<RapportMouvements>(`/rapports/mouvements${qs}`);
     },
@@ -575,16 +789,35 @@ export const api = {
   // --- Journal d'audit ---
   journal: {
     list: async (params?: { page?: number; par_page?: number; action?: string; debut?: string; fin?: string }): Promise<Enveloppe<EntreeJournal[]>> => {
+      if (USE_MOCK_DATA) {
+        return { 
+          donnees: mockJournal,
+          meta: { total: mockJournal.length, page: 1, par_page: params?.par_page || 10 }
+        };
+      }
       const qs = buildQueryString(params as Record<string, string | number | undefined>);
       return request<EntreeJournal[]>(`/journal${qs}`);
     },
 
     getActions: async (params?: { debut?: string; fin?: string }): Promise<Enveloppe<JournalParAction[]>> => {
+      if (USE_MOCK_DATA) {
+        return {
+          donnees: [
+            { action: 'CREATE_PERSONNE', nombre: 15 },
+            { action: 'UPDATE_PERSONNE', nombre: 28 },
+            { action: 'LOGIN', nombre: 142 },
+            { action: 'VALIDER_TRANSFERT', nombre: 8 },
+          ]
+        };
+      }
       const qs = buildQueryString(params as Record<string, string | undefined>);
       return request<JournalParAction[]>(`/journal/actions${qs}`);
     },
 
     getConsultations: async (params?: { debut?: string; fin?: string }): Promise<Enveloppe<JournalConsultations[]>> => {
+      if (USE_MOCK_DATA) {
+        return { donnees: [] };
+      }
       const qs = buildQueryString(params as Record<string, string | undefined>);
       return request<JournalConsultations[]>(`/journal/consultations${qs}`);
     },
@@ -593,15 +826,41 @@ export const api = {
   // --- Utilisateurs ---
   utilisateurs: {
     list: async (params?: { page?: number; par_page?: number; role?: string }): Promise<Enveloppe<Compte[]>> => {
+      if (USE_MOCK_DATA) {
+        return { 
+          donnees: mockComptes,
+          meta: { total: mockComptes.length, page: 1, par_page: 10 }
+        };
+      }
       const qs = buildQueryString(params as Record<string, string | number | undefined>);
       return request<Compte[]>(`/utilisateurs${qs}`);
     },
 
     get: async (id: string): Promise<Enveloppe<Compte>> => {
+      if (USE_MOCK_DATA) {
+        const user = mockComptes.find(u => u.id === id);
+        if (!user) throw new ApiError({ code: 'RESSOURCE_INTROUVABLE', message: 'Utilisateur introuvable', requete_id: '' }, 404);
+        return { donnees: user };
+      }
       return request<Compte>(`/utilisateurs/${id}`);
     },
 
     create: async (data: EntreeCreationUtilisateur): Promise<Enveloppe<Compte>> => {
+      if (USE_MOCK_DATA) {
+        const newUser: Compte = {
+          id: `u${Date.now()}`,
+          email: data.email,
+          nom_complet: data.nom_complet,
+          role: data.role,
+          territoire_id: data.territoire_id,
+          territoire_nom: 'Douala Centre',
+          actif: true,
+          derniere_connexion: null,
+          cree_le: new Date().toISOString(),
+          modifie_le: new Date().toISOString(),
+        };
+        return { donnees: newUser };
+      }
       return request<Compte>('/utilisateurs', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -609,6 +868,11 @@ export const api = {
     },
 
     update: async (id: string, data: EntreeModificationUtilisateur): Promise<Enveloppe<Compte>> => {
+      if (USE_MOCK_DATA) {
+        const user = mockComptes.find(u => u.id === id);
+        if (!user) throw new ApiError({ code: 'RESSOURCE_INTROUVABLE', message: 'Utilisateur introuvable', requete_id: '' }, 404);
+        return { donnees: { ...user, ...data, modifie_le: new Date().toISOString() } };
+      }
       return request<Compte>(`/utilisateurs/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(data),
@@ -616,6 +880,7 @@ export const api = {
     },
 
     archive: async (id: string): Promise<void> => {
+      if (USE_MOCK_DATA) return;
       await request(`/utilisateurs/${id}`, { method: 'DELETE' });
     },
 

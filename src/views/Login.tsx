@@ -125,8 +125,11 @@ export function Login() {
           </div>
 
           <div className="mt-6 p-4 border-2 border-black bg-gray-50">
-            <p className="text-xs font-bold uppercase tracking-wider text-center">
-              <span className="text-red-600">API: railway.app</span> - Si le serveur est inaccessible, verifiez la configuration CORS.
+            <p className="text-xs font-bold uppercase tracking-wider text-center mb-2">
+              Mode Demo Active
+            </p>
+            <p className="text-xs text-gray-600 text-center">
+              Utilisez n'importe quel email et mot de passe pour vous connecter
             </p>
           </div>
         </div>
