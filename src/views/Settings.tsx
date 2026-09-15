@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { User, Globe, Bell, Shield, Database, Save, Check } from 'lucide-react';
 import { Card, Button, Input, Badge } from '../components/ui';
 import { useAuth } from '../hooks/useAuth';
+import { api } from '../services/api';
+import { useToast } from '../components/ui/Toast';
 
 type SettingsTab = 'profile' | 'api' | 'notifications' | 'security';
 

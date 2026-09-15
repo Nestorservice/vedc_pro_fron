@@ -144,7 +144,7 @@ export function Layout({ children, currentView, onNavigate }: LayoutProps) {
               </div>
               <div className="hidden md:block">
                 <p className="text-sm font-medium text-slate-700">{user?.nom_complet || 'Administrateur'}</p>
-                <p className="text-xs text-slate-400">{user?.role?.replace('_', ' ') || 'Super Admin'}</p>
+                <p className="text-xs text-slate-400">{user?.role ? user.role.replace(/_/g, ' ') : 'Super Admin'}</p>
               </div>
             </div>
           </div>
