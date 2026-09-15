@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #0F172A;
-  --color-primary-light: #1E293B;
-  --color-accent: #3B82F6;
-  --color-accent-dark: #1D4ED8;
+  /* Porsche Design System v4 - Pure, Technical, Engineering-Focused */
+  --color-primary: #000000;
+  --color-primary-light: #1A1A1A;
+  --color-accent: #D5001C;
   --color-surface: #FFFFFF;
-  --color-background: #F8FAFC;
+  --color-background: #F2F4F7;
   --color-border: #E2E8F0;
-  --color-border-light: #F1F5F9;
-  --color-text-primary: #0F172A;
-  --color-text-secondary: #64748B;
-  --color-text-muted: #94A3B8;
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-danger: #EF4444;
+  --color-border-dark: #000000;
+  --color-text-primary: #000000;
+  --color-text-secondary: #4A5568;
+  --color-text-muted: #718096;
+  --color-success: #000000;
+  --color-warning: #D5001C;
+  --color-danger: #D5001C;
   --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
@@ -26,13 +26,16 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #F8FAFC;
-  color: #0F172A;
+  background-color: #FFFFFF;
+  color: #000000;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  letter-spacing: -0.011em;
 }
 
+/* Porsche Design - Sharp, Technical Aesthetic */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -40,31 +43,31 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-  border-radius: 3px;
+  background: #000000;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: #1A1A1A;
 }
 
+/* Animations - Snappy, Technical */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(-8px); }
-  to { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes pulse-skeleton {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s ease-out forwards;
+  animation: fadeIn 0.15s ease-out forwards;
 }
 
 .animate-slide-in {
@@ -73,12 +76,29 @@ body {
 
 .skeleton-pulse {
   animation: pulse-skeleton 1.5s ease-in-out infinite;
-  background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%);
-  background-size: 200% 100%;
-  animation: pulse-skeleton 1.5s ease-in-out infinite, shimmer 2s ease-in-out infinite;
+  background: #F2F4F7;
 }
 
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+/* Porsche Design - Typography Scale */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* Porsche Design - Button Hover Underline Effect */
+button, a {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Porsche Design - Sharp Borders */
+input, select, textarea, button {
+  border-radius: 0 !important;
+}
+
+/* Mobile-first safe area support */
+@supports (padding: max(0px)) {
+  .safe-area-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
 }

@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Search, Plus, ChevronLeft, ChevronRight, MoreHorizontal, Eye, Edit, Trash2, Users as UsersIcon } from 'lucide-react';
+import { Search, Plus, ChevronLeft, ChevronRight, MoreHorizontal, Eye, Edit, Trash2, Users as UsersIcon, AlertCircle } from 'lucide-react';
 import { Card, Button, Input, Badge, Modal, Skeleton, EmptyState } from '../components/ui';
-import { api } from '../services/api';
-import type { Personne } from '../services/mockData';
+import { api, ApiError, CorsError, NetworkError } from '../services/api';
+import type { Personne, EntreeCreationPersonne, Sexe, SituationMatrimoniale } from '../services/types';
+import { useToast } from '../components/ui/Toast';
 
 export function Members() {
   const [personnes, setPersonnes] = useState<Personne[]>([]);
@@ -10,61 +11,78 @@ export function Members() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState<Personne | null>(null);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const { addToast } = useToast();
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const result = await api.personnes.list({ page, search });
-    setPersonnes(result.data);
-    setTotal(result.total);
-    setLoading(false);
+    setError(null);
+    try {
+      const result = await api.personnes.list({ page, recherche: search || undefined, par_page: 8 });
+      setPersonnes(result.donnees);
+      setTotal(result.meta?.total || result.donnees.length);
+    } catch (err) {
+      handleApiError(err);
+    } finally {
+      setLoading(false);
+    }
   }, [page, search]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
-  const totalPages = Math.ceil(total / 8);
-
-  const statusVariant = (s: string) => {
-    switch (s) {
-      case 'actif': return 'success';
-      case 'transfere': return 'info';
-      case 'inactif': return 'danger';
-      default: return 'default';
+  const handleApiError = (err: unknown) => {
+    if (err instanceof CorsError) {
+      setError('Connexion au serveur restreintee (CORS). Verifiez la configuration du serveur.');
+      addToast('warning', 'Erreur CORS', err.message);
+    } else if (err instanceof NetworkError) {
+      setError('Impossible de se connecter au serveur.');
+      addToast('error', 'Erreur reseau', err.message);
+    } else if (err instanceof ApiError) {
+      setError(err.message);
+      if (err.status === 403) addToast('error', 'Permission refusee', err.message);
+      else if (err.status === 404) addToast('warning', 'Ressource introuvable', err.message);
+      else addToast('error', 'Erreur API', err.message);
     }
   };
 
+  const totalPages = Math.max(1, Math.ceil(total / 8));
+
+  const statusVariant = (s: string) => {
+    switch (s) { case 'actif': return 'success'; case 'transfere': return 'info'; case 'inactif': return 'danger'; default: return 'default'; }
+  };
+
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h3 className="text-lg font-semibold text-slate-800">Gestion des Membres</h3>
-          <p className="text-sm text-slate-500 mt-0.5">{total} membres enregistres</p>
-        </div>
-        <Button onClick={() => setShowCreate(true)}>
-          <Plus size={16} />
-          Nouveau Membre
-        </Button>
+    <div className="p-8 space-y-8 animate-fade-in">
+      {/* Page Title */}
+      <div className="border-b-2 border-black pb-6">
+        <h1 className="text-4xl font-black uppercase tracking-tight">Membres</h1>
+        <p className="text-sm font-bold uppercase tracking-wider text-gray-600 mt-2">{total} membres enregistres</p>
       </div>
 
-      {/* Search & Filters */}
+      {error && (
+        <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-100 rounded-lg">
+          <AlertCircle size={16} className="text-red-500 shrink-0" />
+          <p className="text-sm text-red-700 flex-1">{error}</p>
+          <button onClick={fetchData} className="text-xs font-medium text-red-600 hover:text-red-800 underline">Reessayer</button>
+        </div>
+      )}
+
       <Card padding={false}>
-        <div className="p-4 border-b border-slate-100">
-          <div className="relative max-w-sm">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Rechercher par nom ou prenom..."
-              value={search}
-              onChange={e => { setSearch(e.target.value); setPage(1); }}
-              className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
-            />
+        <div className="p-6 border-b-2 border-black">
+          <div className="flex items-center gap-4">
+            <div className="relative flex-1 max-w-md">
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-black" />
+              <input type="text" placeholder="Rechercher par nom ou prenom..." value={search}
+                onChange={e => { setSearch(e.target.value); setPage(1); }}
+                className="w-full pl-12 pr-4 py-3 text-sm border-2 border-black focus:outline-none focus:border-gray-600 transition-all duration-150" />
+            </div>
+            <Button onClick={() => setShowCreate(true)}><Plus size={16} /> Nouveau Membre</Button>
           </div>
         </div>
 
-        {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -103,33 +121,18 @@ export function Members() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 hidden md:table-cell">
-                      <span className="text-sm text-slate-600">{person.territoire_nom}</span>
-                    </td>
-                    <td className="px-6 py-4 hidden lg:table-cell">
-                      <span className="text-sm text-slate-500">{new Date(person.date_adhesion).toLocaleDateString('fr-FR')}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <Badge variant={statusVariant(person.statut) as 'success' | 'info' | 'danger'}>{person.statut}</Badge>
-                    </td>
+                    <td className="px-6 py-4 hidden md:table-cell"><span className="text-sm text-slate-600">{person.territoire_nom}</span></td>
+                    <td className="px-6 py-4 hidden lg:table-cell"><span className="text-sm text-slate-500">{String(person.date_adhesion).slice(0, 10)}</span></td>
+                    <td className="px-6 py-4"><Badge variant={statusVariant(person.statut) as 'success' | 'info' | 'danger'}>{person.statut}</Badge></td>
                     <td className="px-6 py-4 text-right relative">
-                      <button
-                        onClick={() => setActiveDropdown(activeDropdown === person.id ? null : person.id)}
-                        className="p-1.5 rounded-lg hover:bg-slate-100 transition-all duration-200"
-                      >
+                      <button onClick={() => setActiveDropdown(activeDropdown === person.id ? null : person.id)} className="p-1.5 rounded-lg hover:bg-slate-100 transition-all duration-200">
                         <MoreHorizontal size={16} className="text-slate-500" />
                       </button>
                       {activeDropdown === person.id && (
                         <div className="absolute right-6 top-12 z-10 bg-white rounded-lg shadow-lg border border-slate-100 py-1 w-40 animate-fade-in">
-                          <button onClick={() => { setSelectedPerson(person); setActiveDropdown(null); }} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-all duration-200">
-                            <Eye size={14} /> Voir
-                          </button>
-                          <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-all duration-200">
-                            <Edit size={14} /> Modifier
-                          </button>
-                          <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-all duration-200">
-                            <Trash2 size={14} /> Archiver
-                          </button>
+                          <button onClick={() => { setSelectedPerson(person); setActiveDropdown(null); }} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-all duration-200"><Eye size={14} /> Voir</button>
+                          <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-all duration-200"><Edit size={14} /> Modifier</button>
+                          <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-all duration-200"><Trash2 size={14} /> Archiver</button>
                         </div>
                       )}
                     </td>
@@ -140,30 +143,21 @@ export function Members() {
           </table>
         </div>
 
-        {/* Pagination */}
         {!loading && total > 0 && (
           <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100">
-            <p className="text-sm text-slate-500">
-              Page {page} sur {totalPages}
-            </p>
+            <p className="text-sm text-slate-500">Page {page} sur {totalPages}</p>
             <div className="flex items-center gap-2">
-              <Button variant="secondary" size="sm" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>
-                <ChevronLeft size={14} />
-              </Button>
-              <Button variant="secondary" size="sm" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}>
-                <ChevronRight size={14} />
-              </Button>
+              <Button variant="secondary" size="sm" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}><ChevronLeft size={14} /></Button>
+              <Button variant="secondary" size="sm" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}><ChevronRight size={14} /></Button>
             </div>
           </div>
         )}
       </Card>
 
-      {/* Create Modal */}
       <Modal open={showCreate} onClose={() => setShowCreate(false)} title="Nouveau Membre">
-        <CreatePersonForm onSuccess={() => { setShowCreate(false); fetchData(); }} />
+        <CreatePersonForm onSuccess={() => { setShowCreate(false); fetchData(); addToast('success', 'Membre cree avec succes'); }} onError={handleApiError} />
       </Modal>
 
-      {/* View Modal */}
       <Modal open={!!selectedPerson} onClose={() => setSelectedPerson(null)} title="Dossier Membre">
         {selectedPerson && (
           <div className="space-y-4">
@@ -177,9 +171,9 @@ export function Members() {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div><p className="text-xs text-slate-500">Date de naissance</p><p className="text-sm font-medium text-slate-700">{new Date(selectedPerson.date_naissance).toLocaleDateString('fr-FR')}</p></div>
+              <div><p className="text-xs text-slate-500">Date de naissance</p><p className="text-sm font-medium text-slate-700">{selectedPerson.date_naissance.slice(0, 10)}</p></div>
               <div><p className="text-xs text-slate-500">Territoire</p><p className="text-sm font-medium text-slate-700">{selectedPerson.territoire_nom}</p></div>
-              <div><p className="text-xs text-slate-500">Date d'adhesion</p><p className="text-sm font-medium text-slate-700">{new Date(selectedPerson.date_adhesion).toLocaleDateString('fr-FR')}</p></div>
+              <div><p className="text-xs text-slate-500">Date d'adhesion</p><p className="text-sm font-medium text-slate-700">{selectedPerson.date_adhesion.slice(0, 10)}</p></div>
               <div><p className="text-xs text-slate-500">Telephone</p><p className="text-sm font-medium text-slate-700">{selectedPerson.telephone1 || 'Non renseigne'}</p></div>
             </div>
             <div className="pt-4 border-t border-slate-100">
@@ -192,8 +186,8 @@ export function Members() {
   );
 }
 
-function CreatePersonForm({ onSuccess }: { onSuccess: () => void }) {
-  const [form, setForm] = useState({ nom: '', prenom: '', sexe: 'M' as 'M' | 'F', date_naissance: '', telephone1: '', situation_matrimoniale: 'celibataire' });
+function CreatePersonForm({ onSuccess, onError }: { onSuccess: () => void; onError: (err: unknown) => void }) {
+  const [form, setForm] = useState({ nom: '', prenom: '', sexe: 'M' as Sexe, date_naissance: '', telephone1: '', situation_matrimoniale: 'celibataire' as SituationMatrimoniale, territoire_id: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -202,6 +196,7 @@ function CreatePersonForm({ onSuccess }: { onSuccess: () => void }) {
     if (!form.nom.trim()) errs.nom = 'Le nom est requis';
     if (!form.prenom.trim()) errs.prenom = 'Le prenom est requis';
     if (!form.date_naissance) errs.date_naissance = 'La date de naissance est requise';
+    if (!form.territoire_id) errs.territoire_id = 'Le territoire est requis';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -210,9 +205,15 @@ function CreatePersonForm({ onSuccess }: { onSuccess: () => void }) {
     e.preventDefault();
     if (!validate()) return;
     setSubmitting(true);
-    await api.personnes.create(form);
-    setSubmitting(false);
-    onSuccess();
+    try {
+      const data: EntreeCreationPersonne = { ...form, date_adhesion: new Date().toISOString().slice(0, 10) } as EntreeCreationPersonne;
+      await api.personnes.create(data);
+      onSuccess();
+    } catch (err) {
+      onError(err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -224,24 +225,15 @@ function CreatePersonForm({ onSuccess }: { onSuccess: () => void }) {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <label className="block text-sm font-medium text-slate-700">Sexe</label>
-          <select value={form.sexe} onChange={e => setForm({ ...form, sexe: e.target.value as 'M' | 'F' })} className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200">
-            <option value="M">Masculin</option>
-            <option value="F">Feminin</option>
+          <select value={form.sexe} onChange={e => setForm({ ...form, sexe: e.target.value as Sexe })} className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200">
+            <option value="M">Masculin</option><option value="F">Feminin</option>
           </select>
         </div>
         <Input label="Date de naissance" type="date" value={form.date_naissance} onChange={e => setForm({ ...form, date_naissance: e.target.value })} error={errors.date_naissance} />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <Input label="Telephone" value={form.telephone1} onChange={e => setForm({ ...form, telephone1: e.target.value })} placeholder="+237 6XX XXX XXX" />
-        <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-slate-700">Situation matrimoniale</label>
-          <select value={form.situation_matrimoniale} onChange={e => setForm({ ...form, situation_matrimoniale: e.target.value })} className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200">
-            <option value="celibataire">Celibataire</option>
-            <option value="marie">Marie(e)</option>
-            <option value="divorce">Divorce(e)</option>
-            <option value="veuf">Veuf/Veuve</option>
-          </select>
-        </div>
+        <Input label="ID Territoire" value={form.territoire_id} onChange={e => setForm({ ...form, territoire_id: e.target.value })} error={errors.territoire_id} placeholder="Ex: t1" />
       </div>
       <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
         <Button type="button" variant="secondary" onClick={onSuccess}>Annuler</Button>
