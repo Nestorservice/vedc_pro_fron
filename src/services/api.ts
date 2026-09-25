@@ -24,7 +24,7 @@ import type {
 
 // --- Configuration ---
 const API_BASE_URL = 'https://vedc-api-production.up.railway.app/api/v1';
-const USE_MOCK_DATA = true; // Mode démo activé par défaut
+const USE_MOCK_DATA = true; // Mode démo activé - utilise des données fictives
 
 // Import mock data
 import {

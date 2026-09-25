@@ -75,7 +75,7 @@ export function Members() {
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-md">
               <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-black" />
-              <input type="text" placeholder="Rechercher par nom ou prenom..." value={search}
+              <input type="text" autoComplete="off" placeholder="Rechercher par nom ou prenom..." value={search}
                 onChange={e => { setSearch(e.target.value); setPage(1); }}
                 className="w-full pl-12 pr-4 py-3 text-sm border-2 border-black focus:outline-none focus:border-gray-600 transition-all duration-150" />
             </div>
