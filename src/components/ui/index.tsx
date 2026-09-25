@@ -53,11 +53,27 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-export function Input({ label, error, className = '', ...props }: InputProps) {
+export function Input({ label, error, className = '', type = 'text', ...props }: InputProps) {
+  // Auto-detect autocomplete based on label or name
+  const getAutoComplete = () => {
+    const labelText = label?.toLowerCase() || props.name?.toLowerCase() || '';
+    if (labelText.includes('email') || labelText.includes('courriel')) return 'email';
+    if (labelText.includes('mot de passe') || labelText.includes('password')) return 'current-password';
+    if (labelText.includes('nom')) return 'family-name';
+    if (labelText.includes('prenom') || labelText.includes('prénom')) return 'given-name';
+    if (labelText.includes('telephone') || labelText.includes('téléphone')) return 'tel';
+    if (labelText.includes('username') || labelText.includes('utilisateur')) return 'username';
+    if (type === 'password') return 'current-password';
+    if (type === 'email') return 'email';
+    return 'off';
+  };
+
   return (
     <div className="space-y-2">
       {label && <label className="block text-xs font-bold uppercase tracking-wider text-black">{label}</label>}
       <input
+        type={type}
+        autoComplete={getAutoComplete()}
         className={`w-full px-4 py-3 text-sm border-2 bg-white transition-all duration-150 focus:outline-none focus:border-black ${
           error ? 'border-red-600' : 'border-black'
         } ${className}`}

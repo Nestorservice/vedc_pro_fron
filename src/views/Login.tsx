@@ -78,6 +78,7 @@ export function Login() {
                 <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-black" />
                 <input
                   type="email"
+                  autoComplete="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   className="w-full pl-12 pr-4 py-4 text-sm border-2 border-black focus:outline-none focus:border-gray-600 transition-all duration-150"
@@ -92,6 +93,7 @@ export function Login() {
                 <Lock size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-black" />
                 <input
                   type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   className="w-full pl-12 pr-12 py-4 text-sm border-2 border-black focus:outline-none focus:border-gray-600 transition-all duration-150"

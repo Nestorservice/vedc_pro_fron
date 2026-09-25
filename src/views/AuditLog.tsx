@@ -79,7 +79,7 @@ export function AuditLog() {
         <div className="p-4 border-b border-slate-100 flex items-center gap-3">
           <div className="relative flex-1 max-w-sm">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input type="text" placeholder="Filtrer les entrees..." value={search} onChange={e => setSearch(e.target.value)}
+            <input type="text" autoComplete="off" placeholder="Filtrer les entrees..." value={search} onChange={e => setSearch(e.target.value)}
               className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200" />
           </div>
           <Badge variant="info">{filtered.length} entrees</Badge>
