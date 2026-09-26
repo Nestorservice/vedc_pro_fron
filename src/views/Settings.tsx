@@ -54,9 +54,9 @@ export function SettingsView() {
   return (
     <div className="p-8 space-y-8 animate-fade-in">
       {/* Page Title */}
-      <div className="border-b-2 border-black pb-6">
-        <h1 className="text-4xl font-black uppercase tracking-tight">Parametres</h1>
-        <p className="text-sm font-bold uppercase tracking-wider text-gray-600 mt-2">Configuration du compte et de l'application</p>
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold text-[#0F172A]">Paramètres</h1>
+        <p className="text-sm text-[#64748B] mt-1">Configuration du compte et de l'application</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

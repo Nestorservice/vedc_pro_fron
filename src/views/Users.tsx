@@ -42,9 +42,9 @@ export function UsersView() {
 
   return (
     <div className="p-8 space-y-8 animate-fade-in">
-      <div className="border-b-2 border-black pb-6">
-        <h1 className="text-4xl font-black uppercase tracking-tight">Utilisateurs</h1>
-        <p className="text-sm font-bold uppercase tracking-wider text-gray-600 mt-2">{users.length} comptes applicatifs</p>
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold text-[#0F172A]">Utilisateurs</h1>
+        <p className="text-sm text-[#64748B] mt-1">{users.length} comptes applicatifs</p>
       </div>
 
       {error && (

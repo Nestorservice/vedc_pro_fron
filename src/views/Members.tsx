@@ -57,27 +57,27 @@ export function Members() {
   return (
     <div className="p-8 space-y-8 animate-fade-in">
       {/* Page Title */}
-      <div className="border-b-2 border-black pb-6">
-        <h1 className="text-4xl font-black uppercase tracking-tight">Membres</h1>
-        <p className="text-sm font-bold uppercase tracking-wider text-gray-600 mt-2">{total} membres enregistres</p>
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold text-[#0F172A]">Membres</h1>
+        <p className="text-sm text-[#64748B] mt-1">{total} membres enregistrés</p>
       </div>
 
       {error && (
-        <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-100 rounded-lg">
-          <AlertCircle size={16} className="text-red-500 shrink-0" />
-          <p className="text-sm text-red-700 flex-1">{error}</p>
-          <button onClick={fetchData} className="text-xs font-medium text-red-600 hover:text-red-800 underline">Reessayer</button>
+        <div className="flex items-center gap-3 p-4 bg-[#FEF2F2] border border-[#FECACA] rounded-2xl">
+          <AlertCircle size={16} className="text-[#EF4444] shrink-0" />
+          <p className="text-sm text-[#991B1B] flex-1">{error}</p>
+          <button onClick={fetchData} className="text-xs font-medium text-[#EF4444] hover:text-[#DC2626] underline transition-all duration-300">Réessayer</button>
         </div>
       )}
 
       <Card padding={false}>
-        <div className="p-6 border-b-2 border-black">
+        <div className="p-6 border-b border-[#F1F5F9]">
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-black" />
-              <input type="text" autoComplete="off" placeholder="Rechercher par nom ou prenom..." value={search}
+              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#94A3B8]" />
+              <input type="text" autoComplete="off" placeholder="Rechercher par nom ou prénom..." value={search}
                 onChange={e => { setSearch(e.target.value); setPage(1); }}
-                className="w-full pl-12 pr-4 py-3 text-sm border-2 border-black focus:outline-none focus:border-gray-600 transition-all duration-150" />
+                className="w-full pl-11 pr-4 py-2.5 text-sm rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] transition-all duration-300" />
             </div>
             <Button onClick={() => setShowCreate(true)}><Plus size={16} /> Nouveau Membre</Button>
           </div>
@@ -86,12 +86,12 @@ export function Members() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-slate-100">
-                <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Membre</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider hidden md:table-cell">Territoire</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider hidden lg:table-cell">Adhesion</th>
-                <th className="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Statut</th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
+              <tr className="border-b border-[#F1F5F9]">
+                <th className="text-left px-6 py-4 text-xs font-semibold text-[#64748B] uppercase tracking-wider">Membre</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-[#64748B] uppercase tracking-wider hidden md:table-cell">Territoire</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-[#64748B] uppercase tracking-wider hidden lg:table-cell">Adhésion</th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-[#64748B] uppercase tracking-wider">Statut</th>
+                <th className="text-right px-6 py-4 text-xs font-semibold text-[#64748B] uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -109,30 +109,30 @@ export function Members() {
                 <tr><td colSpan={5}><EmptyState title="Aucun membre trouve" description="Modifiez vos criteres de recherche ou ajoutez un nouveau membre." icon={<UsersIcon size={24} />} /></td></tr>
               ) : (
                 personnes.map(person => (
-                  <tr key={person.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-all duration-200">
+                  <tr key={person.id} className="border-b border-[#F1F5F9] hover:bg-[#F8FAFC] transition-all duration-300">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-                          <span className="text-xs font-semibold text-slate-600">{person.prenom[0]}{person.nom[0]}</span>
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2563EB] to-[#4F46E5] flex items-center justify-center shadow-sm">
+                          <span className="text-xs font-semibold text-white">{person.prenom[0]}{person.nom[0]}</span>
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-slate-800">{person.prenom} {person.nom}</p>
-                          <p className="text-xs text-slate-500">{person.sexe === 'M' ? 'Homme' : 'Femme'}</p>
+                          <p className="text-sm font-medium text-[#0F172A]">{person.prenom} {person.nom}</p>
+                          <p className="text-xs text-[#64748B]">{person.sexe === 'M' ? 'Homme' : 'Femme'}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 hidden md:table-cell"><span className="text-sm text-slate-600">{person.territoire_nom}</span></td>
-                    <td className="px-6 py-4 hidden lg:table-cell"><span className="text-sm text-slate-500">{String(person.date_adhesion).slice(0, 10)}</span></td>
+                    <td className="px-6 py-4 hidden md:table-cell"><span className="text-sm text-[#475569]">{person.territoire_nom}</span></td>
+                    <td className="px-6 py-4 hidden lg:table-cell"><span className="text-sm text-[#64748B]">{String(person.date_adhesion).slice(0, 10)}</span></td>
                     <td className="px-6 py-4"><Badge variant={statusVariant(person.statut) as 'success' | 'info' | 'danger'}>{person.statut}</Badge></td>
                     <td className="px-6 py-4 text-right relative">
-                      <button onClick={() => setActiveDropdown(activeDropdown === person.id ? null : person.id)} className="p-1.5 rounded-lg hover:bg-slate-100 transition-all duration-200">
-                        <MoreHorizontal size={16} className="text-slate-500" />
+                      <button onClick={() => setActiveDropdown(activeDropdown === person.id ? null : person.id)} className="p-2 rounded-xl hover:bg-[#F1F5F9] transition-all duration-300">
+                        <MoreHorizontal size={16} className="text-[#64748B]" />
                       </button>
                       {activeDropdown === person.id && (
-                        <div className="absolute right-6 top-12 z-10 bg-white rounded-lg shadow-lg border border-slate-100 py-1 w-40 animate-fade-in">
-                          <button onClick={() => { setSelectedPerson(person); setActiveDropdown(null); }} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-all duration-200"><Eye size={14} /> Voir</button>
-                          <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-all duration-200"><Edit size={14} /> Modifier</button>
-                          <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-all duration-200"><Trash2 size={14} /> Archiver</button>
+                        <div className="absolute right-6 top-12 z-10 bg-white rounded-xl shadow-lg border border-[#F1F5F9] py-1 w-44 animate-fade-in">
+                          <button onClick={() => { setSelectedPerson(person); setActiveDropdown(null); }} className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-[#0F172A] hover:bg-[#F8FAFC] transition-all duration-300"><Eye size={14} /> Voir</button>
+                          <button className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-[#0F172A] hover:bg-[#F8FAFC] transition-all duration-300"><Edit size={14} /> Modifier</button>
+                          <button className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-[#EF4444] hover:bg-[#FEF2F2] transition-all duration-300"><Trash2 size={14} /> Archiver</button>
                         </div>
                       )}
                     </td>
@@ -144,8 +144,8 @@ export function Members() {
         </div>
 
         {!loading && total > 0 && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-slate-100">
-            <p className="text-sm text-slate-500">Page {page} sur {totalPages}</p>
+          <div className="flex items-center justify-between px-6 py-4 border-t border-[#F1F5F9]">
+            <p className="text-sm text-[#64748B]">Page {page} sur {totalPages}</p>
             <div className="flex items-center gap-2">
               <Button variant="secondary" size="sm" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}><ChevronLeft size={14} /></Button>
               <Button variant="secondary" size="sm" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}><ChevronRight size={14} /></Button>

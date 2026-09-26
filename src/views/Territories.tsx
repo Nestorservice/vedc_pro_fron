@@ -40,9 +40,9 @@ export function Territories() {
 
   return (
     <div className="p-8 space-y-8 animate-fade-in">
-      <div className="border-b-2 border-black pb-6">
-        <h1 className="text-4xl font-black uppercase tracking-tight">Territoires</h1>
-        <p className="text-sm font-bold uppercase tracking-wider text-gray-600 mt-2">Hierarchie sur 6 niveaux</p>
+      <div className="mb-8">
+        <h1 className="text-2xl font-semibold text-[#0F172A]">Territoires</h1>
+        <p className="text-sm text-[#64748B] mt-1">Hiérarchie sur 6 niveaux</p>
       </div>
 
       {error && (
