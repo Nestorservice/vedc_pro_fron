@@ -35,7 +35,7 @@ export function Layout({ children, currentView, onNavigate }: LayoutProps) {
       <aside className="hidden lg:flex flex-col w-64 bg-white border-r border-[#F1F5F9] fixed h-screen">
         {/* Logo */}
         <div className="flex items-center gap-3 px-6 h-20 border-b border-[#F1F5F9]">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2563EB] to-[#4F46E5] flex items-center justify-center shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#10B981] to-[#059669] flex items-center justify-center shadow-sm">
             <span className="text-lg font-bold text-white">V</span>
           </div>
           <div>
@@ -55,11 +55,11 @@ export function Layout({ children, currentView, onNavigate }: LayoutProps) {
                 onClick={() => onNavigate(item.id)}
                 className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ease-in-out ${
                   isActive
-                    ? 'bg-[#EFF6FF] text-[#2563EB] shadow-sm'
+                    ? 'bg-[#ECFDF5] text-[#10B981] shadow-sm'
                     : 'text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#0F172A]'
                 }`}
               >
-                <Icon size={18} className={isActive ? 'text-[#2563EB]' : ''} />
+                <Icon size={18} className={isActive ? 'text-[#10B981]' : ''} />
                 <span>{item.label}</span>
               </button>
             );
@@ -69,7 +69,7 @@ export function Layout({ children, currentView, onNavigate }: LayoutProps) {
         {/* User Profile */}
         <div className="p-4 border-t border-[#F1F5F9]">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2563EB] to-[#4F46E5] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#10B981] to-[#059669] flex items-center justify-center">
               <span className="text-sm font-semibold text-white">
                 {user?.nom_complet?.split(' ').map(n => n[0]).join('').slice(0, 2) || 'AD'}
               </span>
@@ -93,7 +93,7 @@ export function Layout({ children, currentView, onNavigate }: LayoutProps) {
       <header className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-[#F1F5F9] z-40">
         <div className="flex items-center justify-between px-4 h-16">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#2563EB] to-[#4F46E5] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#10B981] to-[#059669] flex items-center justify-center">
               <span className="text-base font-bold text-white">V</span>
             </div>
             <div>
@@ -131,7 +131,7 @@ export function Layout({ children, currentView, onNavigate }: LayoutProps) {
                     onClick={() => { onNavigate(item.id); setMobileMenuOpen(false); }}
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
                       isActive
-                        ? 'bg-[#EFF6FF] text-[#2563EB]'
+                        ? 'bg-[#ECFDF5] text-[#10B981]'
                         : 'text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#0F172A]'
                     }`}
                   >
@@ -179,7 +179,7 @@ export function Layout({ children, currentView, onNavigate }: LayoutProps) {
                 onClick={() => onNavigate(item.id)}
                 className={`flex flex-col items-center justify-center py-3 px-2 transition-all duration-300 ${
                   isActive
-                    ? 'text-[#2563EB]'
+                    ? 'text-[#10B981]'
                     : 'text-[#94A3B8]'
                 }`}
               >

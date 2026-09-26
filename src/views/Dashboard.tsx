@@ -75,7 +75,7 @@ export function Dashboard() {
             </div>
             <h3 className="text-lg font-semibold text-[#0F172A] mb-2">Erreur de chargement</h3>
             <p className="text-sm text-[#64748B] text-center max-w-md mb-6">{error}</p>
-            <button onClick={loadDashboard} className="px-6 py-3 bg-[#2563EB] text-white text-sm font-medium rounded-xl hover:bg-[#1D4ED8] transition-all duration-300 shadow-sm hover:shadow-md">
+            <button onClick={loadDashboard} className="px-6 py-3 bg-[#10B981] text-white text-sm font-medium rounded-xl hover:bg-[#059669] transition-all duration-300 shadow-sm hover:shadow-md">
               Réessayer
             </button>
           </div>
@@ -86,12 +86,12 @@ export function Dashboard() {
 
   const stats = state.stats;
   const mouvements = state.mouvements?.mouvements || [];
-  const COLORS = ['#2563EB', '#4F46E5', '#7C3AED', '#EC4899'];
+  const COLORS = ['#10B981', '#059669', '#047857', '#065F46'];
 
   const statCards = [
-    { label: 'Total Membres', value: stats?.total_membres.toLocaleString() || '0', icon: Users, color: 'bg-[#EFF6FF] text-[#2563EB]', trend: stats?.croissance_annuelle ? `+${stats.croissance_annuelle}%` : null },
-    { label: 'Serviteurs', value: stats?.total_serviteurs.toLocaleString() || '0', icon: Shield, color: 'bg-[#F5F3FF] text-[#7C3AED]', trend: null },
-    { label: 'Territoires', value: stats?.total_territoires.toString() || '0', icon: MapPin, color: 'bg-[#ECFDF5] text-[#10B981]', trend: null },
+    { label: 'Total Membres', value: stats?.total_membres.toLocaleString() || '0', icon: Users, color: 'bg-[#ECFDF5] text-[#10B981]', trend: stats?.croissance_annuelle ? `+${stats.croissance_annuelle}%` : null },
+    { label: 'Serviteurs', value: stats?.total_serviteurs.toLocaleString() || '0', icon: Shield, color: 'bg-[#F0FDF4] text-[#16A34A]', trend: null },
+    { label: 'Territoires', value: stats?.total_territoires.toString() || '0', icon: MapPin, color: 'bg-[#ECFDF5] text-[#059669]', trend: null },
     { label: 'Transferts en attente', value: stats?.transferts_en_attente.toString() || '0', icon: ArrowRightLeft, color: 'bg-[#FFFBEB] text-[#F59E0B]', trend: null },
   ];
 
@@ -134,7 +134,7 @@ export function Dashboard() {
             </div>
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#2563EB]" />
+                <div className="w-3 h-3 rounded-full bg-[#10B981]" />
                 <span className="text-sm text-[#64748B]">Entrées</span>
               </div>
               <div className="flex items-center gap-2">
@@ -148,15 +148,15 @@ export function Dashboard() {
               <AreaChart data={mouvements.slice(-6)}>
                 <defs>
                   <linearGradient id="colorEntrees" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#2563EB" stopOpacity={0.1} />
-                    <stop offset="95%" stopColor="#2563EB" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#10B981" stopOpacity={0.1} />
+                    <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
                 <XAxis dataKey="mois" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748B' }} />
                 <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748B' }} />
                 <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #F1F5F9', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }} />
-                <Area type="monotone" dataKey="entrees" stroke="#2563EB" strokeWidth={2} fill="url(#colorEntrees)" />
+                <Area type="monotone" dataKey="entrees" stroke="#10B981" strokeWidth={2} fill="url(#colorEntrees)" />
                 <Area type="monotone" dataKey="sorties" stroke="#94A3B8" strokeWidth={2} fill="transparent" />
               </AreaChart>
             </ResponsiveContainer>
@@ -209,7 +209,7 @@ export function Dashboard() {
                 <XAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748B' }} />
                 <YAxis type="category" dataKey="territoire_nom" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#0F172A' }} width={120} />
                 <Tooltip contentStyle={{ borderRadius: '12px', border: '1px solid #F1F5F9' }} />
-                <Bar dataKey="effectif" fill="#2563EB" radius={[0, 8, 8, 0]} barSize={24} />
+                <Bar dataKey="effectif" fill="#10B981" radius={[0, 8, 8, 0]} barSize={24} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -225,7 +225,7 @@ export function Dashboard() {
             {state.activites.length > 0 ? state.activites.map((activity, i) => (
               <div key={activity.id || i} className="flex items-start gap-3 p-3 rounded-xl hover:bg-[#F8FAFC] transition-all duration-300">
                 <div className="w-10 h-10 rounded-xl bg-[#F1F5F9] flex items-center justify-center shrink-0">
-                  {activity.action.includes('CREATE') ? <UserPlus size={16} className="text-[#2563EB]" /> :
+                  {activity.action.includes('CREATE') ? <UserPlus size={16} className="text-[#10B981]" /> :
                    activity.action.includes('TRANSFERT') ? <ArrowRightLeft size={16} className="text-[#F59E0B]" /> :
                    <Users size={16} className="text-[#64748B]" />}
                 </div>

@@ -10,7 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export function Button({ variant = 'primary', size = 'md', children, loading, className = '', ...props }: ButtonProps) {
   const base = 'inline-flex items-center justify-center font-medium transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   const variants = {
-    primary: 'bg-[#2563EB] text-white hover:bg-[#1D4ED8] focus:ring-[#2563EB] shadow-sm hover:shadow-md',
+    primary: 'bg-[#10B981] text-white hover:bg-[#059669] focus:ring-[#10B981] shadow-sm hover:shadow-md',
     secondary: 'bg-white text-[#0F172A] border border-[#E2E8F0] hover:bg-[#F8FAFC] hover:border-[#CBD5E1] focus:ring-[#E2E8F0]',
     ghost: 'text-[#475569] hover:bg-[#F1F5F9] hover:text-[#0F172A] focus:ring-[#E2E8F0]',
     danger: 'bg-[#EF4444] text-white hover:bg-[#DC2626] focus:ring-[#EF4444] shadow-sm',
@@ -73,7 +73,7 @@ export function Input({ label, error, className = '', type = 'text', ...props }:
       <input
         type={type}
         autoComplete={getAutoComplete()}
-        className={`w-full px-4 py-2.5 text-sm rounded-xl border transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] ${
+        className={`w-full px-4 py-2.5 text-sm rounded-xl border transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#10B981]/20 focus:border-[#10B981] ${
           error ? 'border-[#EF4444] bg-[#FEF2F2]' : 'border-[#E2E8F0] bg-white hover:border-[#CBD5E1]'
         } ${className}`}
         {...props}
@@ -95,7 +95,7 @@ export function Badge({ children, variant = 'default', className = '' }: BadgePr
     success: 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]',
     warning: 'bg-[#FFFBEB] text-[#92400E] border border-[#FDE68A]',
     danger: 'bg-[#FEF2F2] text-[#991B1B] border border-[#FECACA]',
-    info: 'bg-[#EFF6FF] text-[#1E40AF] border border-[#BFDBFE]',
+    info: 'bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]',
   };
 
   return (

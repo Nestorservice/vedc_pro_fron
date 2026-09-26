@@ -77,7 +77,7 @@ export function Members() {
               <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#94A3B8]" />
               <input type="text" autoComplete="off" placeholder="Rechercher par nom ou prénom..." value={search}
                 onChange={e => { setSearch(e.target.value); setPage(1); }}
-                className="w-full pl-11 pr-4 py-2.5 text-sm rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] transition-all duration-300" />
+                className="w-full pl-11 pr-4 py-2.5 text-sm rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#10B981]/20 focus:border-[#10B981] transition-all duration-300" />
             </div>
             <Button onClick={() => setShowCreate(true)}><Plus size={16} /> Nouveau Membre</Button>
           </div>
@@ -112,7 +112,7 @@ export function Members() {
                   <tr key={person.id} className="border-b border-[#F1F5F9] hover:bg-[#F8FAFC] transition-all duration-300">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2563EB] to-[#4F46E5] flex items-center justify-center shadow-sm">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#10B981] to-[#059669] flex items-center justify-center shadow-sm">
                           <span className="text-xs font-semibold text-white">{person.prenom[0]}{person.nom[0]}</span>
                         </div>
                         <div>
