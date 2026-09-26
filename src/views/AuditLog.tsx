@@ -69,7 +69,7 @@ export function AuditLog() {
               <XAxis dataKey="action" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748B' }} angle={-15} textAnchor="end" height={50} />
               <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94A3B8' }} />
               <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0' }} />
-              <Bar dataKey="nombre" fill="#6366F1" radius={[4, 4, 0, 0]} barSize={36} />
+              <Bar dataKey="nombre" fill="#10B981" radius={[4, 4, 0, 0]} barSize={36} />
             </BarChart>
           </ResponsiveContainer>
         ) : <div className="flex items-center justify-center h-48 text-sm text-slate-400">Aucune donnee</div>}

@@ -65,7 +65,7 @@ export function Servants() {
               <XAxis dataKey="grade" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748B' }} />
               <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94A3B8' }} />
               <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0' }} />
-              <Bar dataKey="nombre" fill="#6366F1" radius={[4, 4, 0, 0]} barSize={40} />
+              <Bar dataKey="nombre" fill="#10B981" radius={[4, 4, 0, 0]} barSize={40} />
             </BarChart>
           </ResponsiveContainer>
         ) : <div className="flex items-center justify-center h-60 text-sm text-slate-400">Aucune donnee disponible</div>}

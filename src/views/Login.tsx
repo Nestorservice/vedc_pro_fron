@@ -23,7 +23,7 @@ export function Login() {
     <div className="min-h-screen flex bg-[#F8FAFC]">
       {/* Left Panel - Branding */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#2563EB] via-[#4F46E5] to-[#1D4ED8]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#10B981] via-[#059669] to-[#047857]" />
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-20 w-96 h-96 rounded-full bg-white blur-3xl" />
           <div className="absolute bottom-20 right-20 w-80 h-80 rounded-full bg-white blur-3xl" />
@@ -64,7 +64,7 @@ export function Login() {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           <div className="lg:hidden text-center mb-12">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#4F46E5] flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#10B981] to-[#059669] flex items-center justify-center mx-auto mb-6 shadow-lg">
               <span className="text-2xl font-bold text-white">V</span>
             </div>
             <h1 className="text-2xl font-semibold text-[#0F172A]">VEDC</h1>
@@ -87,7 +87,7 @@ export function Login() {
                     autoComplete="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 text-sm rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] transition-all duration-300"
+                    className="w-full pl-11 pr-4 py-3 text-sm rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#10B981]/20 focus:border-[#10B981] transition-all duration-300"
                     placeholder="votre@email.cm"
                   />
                 </div>
@@ -102,7 +102,7 @@ export function Login() {
                     autoComplete="current-password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    className="w-full pl-11 pr-11 py-3 text-sm rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 focus:border-[#2563EB] transition-all duration-300"
+                    className="w-full pl-11 pr-11 py-3 text-sm rounded-xl border border-[#E2E8F0] focus:outline-none focus:ring-2 focus:ring-[#10B981]/20 focus:border-[#10B981] transition-all duration-300"
                     placeholder="Votre mot de passe"
                   />
                   <button
@@ -132,11 +132,11 @@ export function Login() {
               </p>
             </div>
 
-            <div className="mt-4 p-4 bg-[#EFF6FF] rounded-xl border border-[#BFDBFE]">
-              <p className="text-xs text-[#1E40AF] text-center font-medium">
+            <div className="mt-4 p-4 bg-[#ECFDF5] rounded-xl border border-[#A7F3D0]">
+              <p className="text-xs text-[#065F46] text-center font-medium">
                 Mode Démo Activé
               </p>
-              <p className="text-xs text-[#1E40AF] text-center mt-1">
+              <p className="text-xs text-[#065F46] text-center mt-1">
                 Utilisez n'importe quel email et mot de passe
               </p>
             </div>

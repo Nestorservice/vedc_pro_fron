@@ -59,7 +59,7 @@ export function Reports() {
     } finally { setLoading(false); }
   };
 
-  const COLORS = ['#3B82F6', '#6366F1', '#8B5CF6', '#EC4899', '#F59E0B', '#10B981'];
+  const COLORS = ['#10B981', '#059669', '#047857', '#065F46', '#F59E0B', '#34D399'];
 
   const renderReport = () => {
     if (loading) return <Card><Skeleton className="h-64 w-full" /></Card>;
@@ -104,9 +104,9 @@ export function Reports() {
                   <XAxis dataKey="mois" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94A3B8' }} />
                   <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94A3B8' }} />
                   <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0' }} />
-                  <Line type="monotone" dataKey="entrees" stroke="#3B82F6" strokeWidth={2} dot={{ r: 4 }} />
+                  <Line type="monotone" dataKey="entrees" stroke="#10B981" strokeWidth={2} dot={{ r: 4 }} />
                   <Line type="monotone" dataKey="sorties" stroke="#94A3B8" strokeWidth={2} dot={{ r: 4 }} />
-                  <Line type="monotone" dataKey="transferts" stroke="#6366F1" strokeWidth={2} dot={{ r: 4 }} />
+                  <Line type="monotone" dataKey="transferts" stroke="#059669" strokeWidth={2} dot={{ r: 4 }} />
                 </LineChart>
               </ResponsiveContainer>
             ) : <div className="text-center py-8 text-sm text-slate-400">Aucune donnee de mouvement</div>}
@@ -142,7 +142,7 @@ export function Reports() {
                   <XAxis dataKey="territoire_nom" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748B' }} angle={-20} textAnchor="end" height={60} />
                   <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94A3B8' }} />
                   <Tooltip contentStyle={{ borderRadius: '8px', border: '1px solid #E2E8F0' }} />
-                  <Bar dataKey="effectif" fill="#3B82F6" radius={[4, 4, 0, 0]} barSize={32} />
+                  <Bar dataKey="effectif" fill="#10B981" radius={[4, 4, 0, 0]} barSize={32} />
                 </BarChart>
               </ResponsiveContainer>
             ) : <div className="text-center py-8 text-sm text-slate-400">Aucune donnee d'effectif</div>}

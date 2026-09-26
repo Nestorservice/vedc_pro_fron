@@ -66,7 +66,7 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
     success: { icon: CheckCircle, color: 'text-[#10B981]', bg: 'bg-[#ECFDF5]', border: 'border-[#A7F3D0]' },
     error: { icon: AlertCircle, color: 'text-[#EF4444]', bg: 'bg-[#FEF2F2]', border: 'border-[#FECACA]' },
     warning: { icon: AlertTriangle, color: 'text-[#F59E0B]', bg: 'bg-[#FFFBEB]', border: 'border-[#FDE68A]' },
-    info: { icon: Info, color: 'text-[#2563EB]', bg: 'bg-[#EFF6FF]', border: 'border-[#BFDBFE]' },
+    info: { icon: Info, color: 'text-[#10B981]', bg: 'bg-[#ECFDF5]', border: 'border-[#A7F3D0]' },
   };
 
   const { icon: Icon, color, bg, border } = config[toast.type];
