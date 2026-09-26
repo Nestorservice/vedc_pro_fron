@@ -62,22 +62,24 @@ function ToastContainer() {
 }
 
 function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
-  const icons = {
-    success: <CheckCircle size={18} className="text-black shrink-0" />,
-    error: <AlertCircle size={18} className="text-red-600 shrink-0" />,
-    warning: <AlertTriangle size={18} className="text-red-600 shrink-0" />,
-    info: <Info size={18} className="text-black shrink-0" />,
+  const config = {
+    success: { icon: CheckCircle, color: 'text-[#10B981]', bg: 'bg-[#ECFDF5]', border: 'border-[#A7F3D0]' },
+    error: { icon: AlertCircle, color: 'text-[#EF4444]', bg: 'bg-[#FEF2F2]', border: 'border-[#FECACA]' },
+    warning: { icon: AlertTriangle, color: 'text-[#F59E0B]', bg: 'bg-[#FFFBEB]', border: 'border-[#FDE68A]' },
+    info: { icon: Info, color: 'text-[#2563EB]', bg: 'bg-[#EFF6FF]', border: 'border-[#BFDBFE]' },
   };
 
+  const { icon: Icon, color, bg, border } = config[toast.type];
+
   return (
-    <div className="bg-white border-2 border-black p-5 animate-fade-in flex items-start gap-4">
-      {icons[toast.type]}
+    <div className={`${bg} border ${border} rounded-2xl shadow-lg p-4 animate-fade-in flex items-start gap-3`}>
+      <Icon size={18} className={`${color} shrink-0 mt-0.5`} />
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-bold uppercase tracking-wide text-black">{toast.title}</p>
-        {toast.message && <p className="text-xs text-gray-600 mt-1">{toast.message}</p>}
+        <p className="text-sm font-semibold text-[#0F172A]">{toast.title}</p>
+        {toast.message && <p className="text-xs text-[#64748B] mt-0.5">{toast.message}</p>}
       </div>
-      <button onClick={onClose} className="p-1 border-2 border-black hover:bg-black hover:text-white transition-all duration-150 shrink-0">
-        <X size={14} />
+      <button onClick={onClose} className="p-1 rounded-lg hover:bg-white/60 transition-all duration-300 shrink-0">
+        <X size={14} className="text-[#64748B]" />
       </button>
     </div>
   );
